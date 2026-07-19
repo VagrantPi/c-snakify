@@ -1,0 +1,23 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第3課 條件：if / else｜C 語言入門課程</title>
+<link rel="stylesheet" href="style.css">
+<header class="bar"><div class="in"><a class="brand" href="index.html" style="text-decoration:none">C<span class="dot">·</span>入門課程</a><button class="toggle" id="themeBtn" aria-label="切換深淺色">◐</button></div></header>
+<div class="wrap"><div class="crumb"><a href="index.html">課程首頁</a> / 第 3 課</div><span class="eyebrow">第 3 課</span><h1>條件：if / else</h1><div class="theory"><h3>3.1 if：條件成立才執行</h3><div class="code"><span class="lang">C</span><pre>int n = 5;
+if (n &gt; 0) {
+    printf(&quot;positive\n&quot;);
+}</pre></div><p>括號內的條件為「真」（非 0）時，才執行大括號內的敘述。</p><h3>3.2 if / else</h3><div class="code"><span class="lang">C</span><pre>if (n % 2 == 0) {
+    printf(&quot;even\n&quot;);
+} else {
+    printf(&quot;odd\n&quot;);
+}</pre></div><h3>3.3 比較運算子</h3><p><code>==</code> 等於、<code>!=</code> 不等於、<code>&gt;</code>、<code>&lt;</code>、<code>&gt;=</code>、<code>&lt;=</code>。注意：判斷相等是兩個等號 <code>==</code>，一個等號 <code>=</code> 是「指派」。</p><h3>3.4 else if 連鎖</h3><div class="code"><span class="lang">C</span><pre>if (n &gt; 0) {
+    printf(&quot;positive\n&quot;);
+} else if (n &lt; 0) {
+    printf(&quot;negative\n&quot;);
+} else {
+    printf(&quot;zero\n&quot;);
+}</pre></div><h3>3.5 邏輯運算子</h3><p><code>&amp;&amp;</code>（且）、<code>||</code>（或）、<code>!</code>（非）。</p><div class="code"><span class="lang">C</span><pre>int score = 85;
+if (score &gt;= 60 &amp;&amp; score &lt; 70) {
+    printf(&quot;D\n&quot;);
+}</pre></div></div><h2 style="margin-top:30px">📝 練習題</h2><p class="lead" style="margin-bottom:6px">點進每一題，用本地 IDE 完成後貼上測試指令檢查。</p><div class="plist"><a href="l3p1.html"><span class="n">L3-1</span><b>較大者</b></a><a href="l3p2.html"><span class="n">L3-2</span><b>正負零</b></a><a href="l3p3.html"><span class="n">L3-3</span><b>奇偶</b></a><a href="l3p4.html"><span class="n">L3-4</span><b>三數最大</b></a><a href="l3p5.html"><span class="n">L3-5</span><b>成績等第</b></a></div><div class="nav"><a href="index.html">← 課程首頁</a><span class="sp"></span></div><footer>第 3 課 · 5 題練習</footer></div>
+<script src="app.js"></script>
