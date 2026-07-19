@@ -1,0 +1,200 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C 語言入門課程（Snakify 風格）</title>
+<style>
+  :root{--bg:#f6f8fb;--surface:#fff;--surface-2:#eef1f7;--code-bg:#0f1626;--code-fg:#e7ecf5;--text:#171c28;--muted:#59637a;--border:#dde3ee;--accent:#3f6ad8;--accent-soft:#e6ecfd;--good:#1f8a4c;--mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC","PingFang TC",sans-serif;}
+  @media (prefers-color-scheme:dark){:root{--bg:#0e1218;--surface:#151b25;--surface-2:#1d2531;--code-bg:#0b1120;--text:#e7eaf2;--muted:#94a0b8;--border:#28303d;--accent:#7f9cf5;--accent-soft:#1a2440;--good:#54cf78;}}
+  :root[data-theme="light"]{--bg:#f6f8fb;--surface:#fff;--surface-2:#eef1f7;--code-bg:#0f1626;--text:#171c28;--muted:#59637a;--border:#dde3ee;--accent:#3f6ad8;--good:#1f8a4c;}
+  :root[data-theme="dark"]{--bg:#0e1218;--surface:#151b25;--surface-2:#1d2531;--code-bg:#0b1120;--text:#e7eaf2;--muted:#94a0b8;--border:#28303d;--accent:#7f9cf5;--good:#54cf78;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased}
+  code{font-family:var(--mono);font-size:.9em;background:var(--surface-2);padding:.08em .35em;border-radius:5px}
+  a{color:var(--accent);text-decoration:none}
+  header.bar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--surface) 90%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+  .bar .in{max-width:1040px;margin:0 auto;padding:0 20px;height:56px;display:flex;align-items:center;gap:12px}
+  .brand{font-family:var(--mono);font-weight:700}
+  .brand .dot{color:var(--accent)}
+  .toggle{margin-left:auto;width:38px;height:32px;border:1px solid var(--border);background:var(--surface);border-radius:8px;color:var(--text);cursor:pointer;display:grid;place-items:center}
+  .shell{max-width:1040px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:200px 1fr;gap:28px;align-items:start}
+  nav.toc{position:sticky;top:72px;display:flex;flex-direction:column;gap:4px;padding-top:26px}
+  nav.toc a{padding:8px 12px;border-radius:9px;color:var(--muted);font-size:.9rem;border:1px solid transparent}
+  nav.toc a span{display:block;font-size:.78rem;opacity:.8}
+  nav.toc a:hover{background:var(--surface);color:var(--text)}
+  main{padding:26px 0 60px;min-width:0}
+  .hero h1{font-size:2rem;letter-spacing:-.02em;margin:.2rem 0 .4rem}
+  .hero p{color:var(--muted);margin:0;max-width:60ch}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  .lesson{border-top:1px solid var(--border);padding-top:26px;margin-top:34px;scroll-margin-top:70px}
+  .lhead h2{font-size:1.5rem;letter-spacing:-.02em;margin:.15rem 0 0}
+  h3{font-size:1.08rem;margin:1.5rem 0 .4rem}
+  .theory ul{padding-left:20px}.theory li{margin:3px 0}
+  .code{position:relative;margin:.7rem 0;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+  .code .lang{position:absolute;top:0;right:0;font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;color:var(--muted);background:var(--surface-2);padding:2px 8px;border-bottom-left-radius:8px}
+  .code pre{margin:0;background:var(--code-bg);color:var(--code-fg);padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:.85rem;line-height:1.55;tab-size:4}
+  .io{display:inline-block;vertical-align:top;margin:.4rem .6rem .2rem 0;min-width:120px}
+  .iolab{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .io pre{margin:3px 0 0;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-family:var(--mono);font-size:.84rem;overflow-x:auto}
+  .tbl{border-collapse:collapse;width:100%;margin:.6rem 0;font-size:.9rem;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+  .tbl th,.tbl td{border-bottom:1px solid var(--border);padding:8px 12px;text-align:left}
+  .tbl th{background:var(--surface-2);font-size:.8rem;color:var(--muted)}
+  .probs{margin-top:26px}.ptitle{font-size:1.15rem}
+  .prob{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:15px 17px;margin-top:12px}
+  .phead{display:flex;align-items:center;gap:10px}
+  .pn{font-family:var(--mono);font-size:.72rem;color:#fff;background:var(--accent);padding:2px 8px;border-radius:6px;font-weight:700}
+  :root[data-theme="dark"] .pn{color:#0e1218}
+  @media (prefers-color-scheme:dark){.pn{color:#0e1218}}
+  .pdesc{margin:.5rem 0 .3rem}.ios{margin:.3rem 0}
+  .sol{margin-top:8px;border-top:1px dashed var(--border);padding-top:8px}
+  .sol summary{cursor:pointer;font-family:var(--mono);font-size:.82rem;color:var(--good);font-weight:700}
+  .soon{border-top:1px solid var(--border);margin-top:34px;padding-top:22px;color:var(--muted);font-size:.9rem}
+  footer{border-top:1px solid var(--border);margin-top:40px;padding:22px 0 50px;color:var(--muted);font-size:.82rem}
+  @media (max-width:760px){.shell{grid-template-columns:1fr;gap:0}nav.toc{position:static;flex-direction:row;overflow-x:auto;padding:12px 0 0;gap:6px}nav.toc a{white-space:nowrap;border:1px solid var(--border);background:var(--surface)}nav.toc a span{display:none}.hero h1{font-size:1.6rem}.code pre{font-size:.8rem}}
+</style><header class="bar"><div class="in"><span class="brand">C<span class="dot">·</span>入門課程</span><button class="toggle" id="themeBtn" aria-label="切換深淺色">◐</button></div></header><div class="shell"><nav class="toc"><a href="#l1">第 1 課<span>第一支程式、輸出與輸入</span></a><a href="#l2">第 2 課<span>資料型別與運算</span></a><a href="#l3">第 3 課<span>條件：if / else</span></a><a href="#more" style="opacity:.6">更多<span>陸續加入</span></a></nav><main><div class="hero"><span class="eyebrow">Learn C · Snakify 風格</span><h1>C 語言入門課程</h1><p>仿 Snakify 的「先教語法、再做練習」結構。每一課包含觀念教學、可執行範例，以及練習題——所有參考解答都經實際 <code>cc</code> 編譯執行驗證。</p></div><section class="lesson" id="l1"><div class="lhead"><span class="eyebrow">第 1 課</span><h2>第一支程式、輸出與輸入</h2></div><div class="theory"><h3>1.1 你的第一支 C 程式</h3><p>C 程式從 <code>main</code> 函式開始執行。下面這支程式會在螢幕印出一行字：</p><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+
+int main() {
+    printf(&quot;Hello, world!\n&quot;);
+    return 0;
+}</pre></div><ul><li><code>#include &lt;stdio.h&gt;</code>：引入標準輸入輸出函式庫，才能使用 <code>printf</code> / <code>scanf</code>。</li><li><code>int main() { ... }</code>：程式進入點，大括號內是要執行的敘述。</li><li><code>printf("...")</code>：把字串印到螢幕，<code>\n</code> 代表換行。</li><li><code>return 0;</code>：告訴系統程式正常結束。</li><li>每一行敘述都要以分號 <code>;</code> 結尾。</li></ul><p><b>編譯與執行</b>（終端機）：</p><div class="code"><span class="lang">C</span><pre>cc hello.c -o hello   # 編譯，產生執行檔 hello
+./hello               # 執行</pre></div><div class="io"><span class="iolab">輸出</span><pre>Hello, world!</pre></div><h3>1.2 註解</h3><p>註解是給人看的說明，編譯器會忽略：</p><div class="code"><span class="lang">C</span><pre>// 這是單行註解
+/* 這是
+   多行註解 */</pre></div><h3>1.3 變數與整數</h3><p>變數要先「宣告型別」再使用。整數用 <code>int</code>，用 <code>printf</code> 的 <code>%d</code> 印出：</p><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+
+int main() {
+    int age = 18;
+    printf(&quot;%d\n&quot;, age);   // 印出 18
+    return 0;
+}</pre></div><p><code>%d</code> 是「佔位符」，會被後面的變數值取代。</p><h3>1.4 讀取輸入：scanf</h3><p>用 <code>scanf</code> 從鍵盤讀入資料。注意變數前要加 <code>&amp;</code>（取位址）：</p><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+
+int main() {
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);       // 讀入一個整數存進 n
+    printf(&quot;%d\n&quot;, n);     // 原樣印出
+    return 0;
+}</pre></div><p>一次讀多個，用空白分隔格式字串：</p><div class="code"><span class="lang">C</span><pre>int a, b;
+scanf(&quot;%d %d&quot;, &amp;a, &amp;b);
+printf(&quot;%d\n&quot;, a + b);   // 印出兩數之和</pre></div></div><div class="probs"><h3 class="ptitle">📝 練習題</h3><div class="prob"><div class="phead"><span class="pn">L1-1</span><b>印出 Hello, world!</b></div><p class="pdesc">寫一支程式，在螢幕印出一行 <code>Hello, world!</code>。</p><div class="ios"><div class="io"><span class="iolab">範例輸出</span><pre>Hello, world!</pre></div></div><details class="sol"><summary>參考解答（已編譯執行驗證 ✓）</summary><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+int main() {
+    printf(&quot;Hello, world!\n&quot;);
+    return 0;
+}</pre></div></details></div><div class="prob"><div class="phead"><span class="pn">L1-2</span><b>印出讀到的整數</b></div><p class="pdesc">讀入一個整數 <code>n</code>，把它原樣印出。</p><div class="ios"><div class="io"><span class="iolab">範例輸入</span><pre>42</pre></div><div class="io"><span class="iolab">範例輸出</span><pre>42</pre></div></div><details class="sol"><summary>參考解答（已編譯執行驗證 ✓）</summary><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+int main() {
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;%d\n&quot;, n);
+    return 0;
+}</pre></div></details></div><div class="prob"><div class="phead"><span class="pn">L1-3</span><b>兩數之和</b></div><p class="pdesc">讀入兩個整數 <code>a</code>、<code>b</code>，印出它們的和。</p><div class="ios"><div class="io"><span class="iolab">範例輸入</span><pre>3 5</pre></div><div class="io"><span class="iolab">範例輸出</span><pre>8</pre></div></div><details class="sol"><summary>參考解答（已編譯執行驗證 ✓）</summary><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+int main() {
+    int a, b;
+    scanf(&quot;%d %d&quot;, &amp;a, &amp;b);
+    printf(&quot;%d\n&quot;, a + b);
+    return 0;
+}</pre></div></details></div><div class="prob"><div class="phead"><span class="pn">L1-4</span><b>和與積</b></div><p class="pdesc">讀入兩個整數，第一行印出它們的和，第二行印出它們的積。</p><div class="ios"><div class="io"><span class="iolab">範例輸入</span><pre>4 6</pre></div><div class="io"><span class="iolab">範例輸出</span><pre>10
+24</pre></div></div><details class="sol"><summary>參考解答（已編譯執行驗證 ✓）</summary><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+int main() {
+    int a, b;
+    scanf(&quot;%d %d&quot;, &amp;a, &amp;b);
+    printf(&quot;%d\n%d\n&quot;, a + b, a * b);
+    return 0;
+}</pre></div></details></div><div class="prob"><div class="phead"><span class="pn">L1-5</span><b>三數之和</b></div><p class="pdesc">讀入三個整數，印出它們的總和。</p><div class="ios"><div class="io"><span class="iolab">範例輸入</span><pre>1 2 3</pre></div><div class="io"><span class="iolab">範例輸出</span><pre>6</pre></div></div><details class="sol"><summary>參考解答（已編譯執行驗證 ✓）</summary><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+int main() {
+    int a, b, c;
+    scanf(&quot;%d %d %d&quot;, &amp;a, &amp;b, &amp;c);
+    printf(&quot;%d\n&quot;, a + b + c);
+    return 0;
+}</pre></div></details></div></div></section><section class="lesson" id="l2"><div class="lhead"><span class="eyebrow">第 2 課</span><h2>資料型別與運算</h2></div><div class="theory"><h3>2.1 常用資料型別</h3><table class="tbl"><tr><th>型別</th><th>用途</th><th>printf 格式</th><th>範例</th></tr><tr><td><code>int</code></td><td>整數</td><td><code>%d</code></td><td><code>int n = 10;</code></td></tr><tr><td><code>float</code> / <code>double</code></td><td>小數（浮點數）</td><td><code>%f</code></td><td><code>double x = 3.14;</code></td></tr><tr><td><code>char</code></td><td>單一字元</td><td><code>%c</code></td><td><code>char g = 'A';</code></td></tr></table><h3>2.2 算術運算子</h3><p><code>+</code> 加、<code>-</code> 減、<code>*</code> 乘、<code>/</code> 除、<code>%</code> 取餘數。乘除餘優先於加減，可用括號改變順序。</p><div class="code"><span class="lang">C</span><pre>int a = 17, b = 5;
+printf(&quot;%d\n&quot;, a + b);   // 22
+printf(&quot;%d\n&quot;, a / b);   // 3  （整數除法，小數被捨去）
+printf(&quot;%d\n&quot;, a % b);   // 2  （餘數）</pre></div><h3>2.3 整數除法 vs 浮點除法（重要陷阱）</h3><p>兩個整數相除，結果會「捨去小數」。想得到小數，其中一邊要是浮點數：</p><div class="code"><span class="lang">C</span><pre>printf(&quot;%d\n&quot;, 7 / 2);        // 3   （整數除法）
+printf(&quot;%.1f\n&quot;, 7 / 2.0);    // 3.5 （有一邊是 2.0 → 浮點除法）</pre></div><p><code>%.1f</code> 表示印出小數點後 1 位。</p><h3>2.4 型別轉換（cast）</h3><p>用 <code>(型別)</code> 可臨時把值轉成另一種型別：</p><div class="code"><span class="lang">C</span><pre>int a = 7, b = 2;
+printf(&quot;%.2f\n&quot;, (double)a / b);  // 3.50</pre></div><h3>2.5 取出位數的技巧</h3><p><code>% 10</code> 取個位數，<code>/ 10</code> 去掉個位數：</p><div class="code"><span class="lang">C</span><pre>int n = 456;
+printf(&quot;%d\n&quot;, n % 10);   // 6   個位數
+printf(&quot;%d\n&quot;, n / 10);   // 45  去掉個位</pre></div></div><div class="probs"><h3 class="ptitle">📝 練習題</h3><div class="prob"><div class="phead"><span class="pn">L2-1</span><b>商與餘數</b></div><p class="pdesc">讀入兩個整數 <code>a</code>、<code>b</code>，印出 <code>a/b</code> 的商與餘數（同一行，空白分隔）。</p><div class="ios"><div class="io"><span class="iolab">範例輸入</span><pre>17 5</pre></div><div class="io"><span class="iolab">範例輸出</span><pre>3 2</pre></div></div><details class="sol"><summary>參考解答（已編譯執行驗證 ✓）</summary><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+int main() {
+    int a, b;
+    scanf(&quot;%d %d&quot;, &amp;a, &amp;b);
+    printf(&quot;%d %d\n&quot;, a / b, a % b);
+    return 0;
+}</pre></div></details></div><div class="prob"><div class="phead"><span class="pn">L2-2</span><b>矩形面積</b></div><p class="pdesc">讀入矩形的寬與高（整數），印出面積。</p><div class="ios"><div class="io"><span class="iolab">範例輸入</span><pre>4 5</pre></div><div class="io"><span class="iolab">範例輸出</span><pre>20</pre></div></div><details class="sol"><summary>參考解答（已編譯執行驗證 ✓）</summary><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+int main() {
+    int w, h;
+    scanf(&quot;%d %d&quot;, &amp;w, &amp;h);
+    printf(&quot;%d\n&quot;, w * h);
+    return 0;
+}</pre></div></details></div><div class="prob"><div class="phead"><span class="pn">L2-3</span><b>三數平均</b></div><p class="pdesc">讀入三個整數，印出它們的平均（小數點後 1 位）。</p><div class="ios"><div class="io"><span class="iolab">範例輸入</span><pre>1 2 4</pre></div><div class="io"><span class="iolab">範例輸出</span><pre>2.3</pre></div></div><details class="sol"><summary>參考解答（已編譯執行驗證 ✓）</summary><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+int main() {
+    int a, b, c;
+    scanf(&quot;%d %d %d&quot;, &amp;a, &amp;b, &amp;c);
+    printf(&quot;%.1f\n&quot;, (a + b + c) / 3.0);
+    return 0;
+}</pre></div></details></div><div class="prob"><div class="phead"><span class="pn">L2-4</span><b>個位數</b></div><p class="pdesc">讀入一個整數，印出它的個位數。</p><div class="ios"><div class="io"><span class="iolab">範例輸入</span><pre>456</pre></div><div class="io"><span class="iolab">範例輸出</span><pre>6</pre></div></div><details class="sol"><summary>參考解答（已編譯執行驗證 ✓）</summary><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+int main() {
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    printf(&quot;%d\n&quot;, n % 10);
+    return 0;
+}</pre></div></details></div><div class="prob"><div class="phead"><span class="pn">L2-5</span><b>攝氏轉華氏</b></div><p class="pdesc">讀入攝氏溫度（整數 c），用公式 <code>c*9/5+32</code> 印出華氏溫度（整數）。</p><div class="ios"><div class="io"><span class="iolab">範例輸入</span><pre>100</pre></div><div class="io"><span class="iolab">範例輸出</span><pre>212</pre></div></div><details class="sol"><summary>參考解答（已編譯執行驗證 ✓）</summary><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+int main() {
+    int c;
+    scanf(&quot;%d&quot;, &amp;c);
+    printf(&quot;%d\n&quot;, c * 9 / 5 + 32);
+    return 0;
+}</pre></div></details></div></div></section><section class="lesson" id="l3"><div class="lhead"><span class="eyebrow">第 3 課</span><h2>條件：if / else</h2></div><div class="theory"><h3>3.1 if：條件成立才執行</h3><div class="code"><span class="lang">C</span><pre>int n = 5;
+if (n &gt; 0) {
+    printf(&quot;positive\n&quot;);
+}</pre></div><p>括號內的條件為「真」（非 0）時，才執行大括號內的敘述。</p><h3>3.2 if / else</h3><div class="code"><span class="lang">C</span><pre>if (n % 2 == 0) {
+    printf(&quot;even\n&quot;);
+} else {
+    printf(&quot;odd\n&quot;);
+}</pre></div><h3>3.3 比較運算子</h3><p><code>==</code> 等於、<code>!=</code> 不等於、<code>&gt;</code> 大於、<code>&lt;</code> 小於、<code>&gt;=</code>、<code>&lt;=</code>。注意：判斷相等是兩個等號 <code>==</code>，一個等號 <code>=</code> 是「指派」。</p><h3>3.4 else if 連鎖</h3><div class="code"><span class="lang">C</span><pre>if (n &gt; 0) {
+    printf(&quot;positive\n&quot;);
+} else if (n &lt; 0) {
+    printf(&quot;negative\n&quot;);
+} else {
+    printf(&quot;zero\n&quot;);
+}</pre></div><h3>3.5 邏輯運算子</h3><p><code>&amp;&amp;</code>（且，兩者皆真）、<code>||</code>（或，其一為真）、<code>!</code>（非）。</p><div class="code"><span class="lang">C</span><pre>int score = 85;
+if (score &gt;= 60 &amp;&amp; score &lt; 70) {
+    printf(&quot;D\n&quot;);
+}</pre></div></div><div class="probs"><h3 class="ptitle">📝 練習題</h3><div class="prob"><div class="phead"><span class="pn">L3-1</span><b>較大者</b></div><p class="pdesc">讀入兩個整數，印出比較大的那一個。</p><div class="ios"><div class="io"><span class="iolab">範例輸入</span><pre>3 8</pre></div><div class="io"><span class="iolab">範例輸出</span><pre>8</pre></div></div><details class="sol"><summary>參考解答（已編譯執行驗證 ✓）</summary><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+int main() {
+    int a, b;
+    scanf(&quot;%d %d&quot;, &amp;a, &amp;b);
+    if (a &gt; b) printf(&quot;%d\n&quot;, a);
+    else       printf(&quot;%d\n&quot;, b);
+    return 0;
+}</pre></div></details></div><div class="prob"><div class="phead"><span class="pn">L3-2</span><b>正負零</b></div><p class="pdesc">讀入一個整數，正數印 <code>positive</code>、負數印 <code>negative</code>、零印 <code>zero</code>。</p><div class="ios"><div class="io"><span class="iolab">範例輸入</span><pre>-5</pre></div><div class="io"><span class="iolab">範例輸出</span><pre>negative</pre></div></div><details class="sol"><summary>參考解答（已編譯執行驗證 ✓）</summary><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+int main() {
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n &gt; 0)      printf(&quot;positive\n&quot;);
+    else if (n &lt; 0) printf(&quot;negative\n&quot;);
+    else            printf(&quot;zero\n&quot;);
+    return 0;
+}</pre></div></details></div><div class="prob"><div class="phead"><span class="pn">L3-3</span><b>奇偶</b></div><p class="pdesc">讀入一個整數，偶數印 <code>even</code>、奇數印 <code>odd</code>。</p><div class="ios"><div class="io"><span class="iolab">範例輸入</span><pre>7</pre></div><div class="io"><span class="iolab">範例輸出</span><pre>odd</pre></div></div><details class="sol"><summary>參考解答（已編譯執行驗證 ✓）</summary><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+int main() {
+    int n;
+    scanf(&quot;%d&quot;, &amp;n);
+    if (n % 2 == 0) printf(&quot;even\n&quot;);
+    else            printf(&quot;odd\n&quot;);
+    return 0;
+}</pre></div></details></div><div class="prob"><div class="phead"><span class="pn">L3-4</span><b>三數最大</b></div><p class="pdesc">讀入三個整數，印出其中最大的。</p><div class="ios"><div class="io"><span class="iolab">範例輸入</span><pre>4 9 2</pre></div><div class="io"><span class="iolab">範例輸出</span><pre>9</pre></div></div><details class="sol"><summary>參考解答（已編譯執行驗證 ✓）</summary><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+int main() {
+    int a, b, c, m;
+    scanf(&quot;%d %d %d&quot;, &amp;a, &amp;b, &amp;c);
+    m = a;
+    if (b &gt; m) m = b;
+    if (c &gt; m) m = c;
+    printf(&quot;%d\n&quot;, m);
+    return 0;
+}</pre></div></details></div><div class="prob"><div class="phead"><span class="pn">L3-5</span><b>成績等第</b></div><p class="pdesc">讀入一個分數（0–100），依 <code>&gt;=90 A、&gt;=80 B、&gt;=70 C、&gt;=60 D、其餘 F</code> 印出等第。</p><div class="ios"><div class="io"><span class="iolab">範例輸入</span><pre>85</pre></div><div class="io"><span class="iolab">範例輸出</span><pre>B</pre></div></div><details class="sol"><summary>參考解答（已編譯執行驗證 ✓）</summary><div class="code"><span class="lang">C</span><pre>#include &lt;stdio.h&gt;
+int main() {
+    int s;
+    scanf(&quot;%d&quot;, &amp;s);
+    char g;
+    if (s &gt;= 90)      g = &#x27;A&#x27;;
+    else if (s &gt;= 80) g = &#x27;B&#x27;;
+    else if (s &gt;= 70) g = &#x27;C&#x27;;
+    else if (s &gt;= 60) g = &#x27;D&#x27;;
+    else              g = &#x27;F&#x27;;
+    printf(&quot;%c\n&quot;, g);
+    return 0;
+}</pre></div></details></div></div></section><div class="soon" id="more"><b>更多課程陸續加入</b>：while 迴圈、for 迴圈、函式與遞迴、陣列、字串、二維陣列、指標、結構⋯⋯（本版先提供前 3 課）</div><footer>C 語言入門課程 · 仿 Snakify 教學結構 · 參考解答皆經 cc 編譯執行驗證 · 練習題輸入由標準輸入 scanf 讀取</footer></main></div><script>const root=document.documentElement;document.getElementById("themeBtn").onclick=()=>{const cur=root.getAttribute("data-theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");root.setAttribute("data-theme",cur==="dark"?"light":"dark");};</script>
