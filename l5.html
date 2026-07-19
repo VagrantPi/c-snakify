@@ -1,0 +1,19 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第5課 字串｜C 語言入門課程</title>
+<link rel="stylesheet" href="style.css">
+<script>try{if(localStorage.getItem("c_sidebar")==="collapsed")document.documentElement.classList.add("side-collapsed")}catch(e){}</script>
+<header class="bar"><div class="in"><button class="sidetoggle" id="sideBtn" aria-label="收合或展開側邊欄" title="側邊欄">☰</button><a class="brand" href="index.html" style="text-decoration:none">C<span class="dot">·</span>入門課程</a><button class="toggle" id="themeBtn" aria-label="切換深淺色">◐</button></div></header>
+<div class="wrap"><div class="layout"><aside class="side"><nav class="outline"><a class="lhead" href="l1.html">1. 輸入、輸出與數字</a><a class="lhead" href="l2.html">2. 整數與浮點數</a><a class="lhead" href="l3.html">3. 條件：if / else</a><a class="lhead" href="l4.html">4. for 迴圈</a><a class="lhead cur" href="l5.html">5. 字串</a><div class="sidenav"><a href="l5p1.html">切片</a><a href="l5p2.html">單字數量</a><a href="l5p3.html">兩個半邊</a><a href="l5p4.html">交換兩個單字</a><a href="l5p5.html">第一次與最後一次出現</a><a href="l5p6.html">第二次出現</a><a href="l5p7.html">移除片段</a><a href="l5p8.html">反轉片段</a><a href="l5p9.html">取代子字串</a><a href="l5p10.html">刪除字元</a><a href="l5p11.html">片段內取代</a><a href="l5p12.html">刪除每第三個字元</a></div><span class="lhead muted" title="尚未開放">6. while 迴圈</span><span class="lhead muted" title="尚未開放">7. 陣列</span><span class="lhead muted" title="尚未開放">8. 函式與遞迴</span><span class="lhead muted" title="尚未開放">9. 二維陣列</span></nav></aside><main class="content"><div class="crumb"><a href="index.html">課程首頁</a> / 第 5 課</div><span class="eyebrow">第 5 課</span><h1>字串</h1><div class="theory"><h3>5.1 字串 = 字元陣列</h3><p>C 的字串是「字元陣列」，結尾有一個看不見的空字元 <code>\0</code>。用索引 <code>s[i]</code> 取單一字元，<code>&lt;string.h&gt;</code> 的 <code>strlen</code> 取長度：</p><div class="code"><span class="lang">C</span><pre>#include &lt;string.h&gt;
+char s[100] = &quot;hello&quot;;
+printf(&quot;%c\n&quot;, s[0]);            // h   用索引取單一字元
+printf(&quot;%zu\n&quot;, strlen(s));      // 5   字串長度</pre></div><h3>5.2 讀入一整行</h3><p>要讀入可能含空白的一整行，用 <code>fgets</code>，再把結尾的換行去掉：</p><div class="code"><span class="lang">C</span><pre>char s[1000];
+fgets(s, sizeof s, stdin);       // 讀入一整行（可含空白）
+s[strcspn(s, &quot;\n&quot;)] = 0;         // 去掉結尾換行</pre></div><h3>5.3 逐字元走訪</h3><p>用迴圈跑過每個字元（到 <code>\0</code> 為止）：</p><div class="code"><span class="lang">C</span><pre>int i;
+for (i = 0; s[i] != &#x27;\0&#x27;; i++)   // 走訪每個字元，字串以 \0 結尾
+    putchar(s[i]);
+putchar(&#x27;\n&#x27;);</pre></div><h3>5.4 反轉印出</h3><p>從最後一個索引往前印，就能反轉：</p><div class="code"><span class="lang">C</span><pre>int i, L = strlen(s);
+for (i = L - 1; i &gt;= 0; i--)     // 從最後往前印 = 反轉
+    putchar(s[i]);
+putchar(&#x27;\n&#x27;);</pre></div><h3>5.5 常用格式</h3><p><code>%c</code> 印單一字元、<code>%s</code> 印整個字串、<code>%.5s</code> 印前 5 個字元、<code>%.*s</code> 可用變數指定長度；<code>scanf("%s", w)</code> 讀入一個不含空白的單字。</p></div><h2 style="margin-top:30px">📝 練習題</h2><p class="lead" style="margin-bottom:6px">本課共 12 題，見<b>側邊欄</b>（手機在上方）。點進每一題，用本地 IDE 完成後貼上測試指令檢查。</p><div class="nav"><a href="index.html">← 課程首頁</a><span class="sp"></span></div><footer>第 5 課 · 12 題練習</footer></main></div></div>
+<script src="app.js"></script>
