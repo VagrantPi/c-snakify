@@ -1,0 +1,18 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第2課 整數與浮點數｜C 語言入門課程</title>
+<link rel="stylesheet" href="style.css">
+<script>try{if(localStorage.getItem("c_sidebar")==="collapsed")document.documentElement.classList.add("side-collapsed")}catch(e){}</script>
+<header class="bar"><div class="in"><button class="sidetoggle" id="sideBtn" aria-label="收合或展開側邊欄" title="側邊欄">☰</button><a class="brand" href="index.html" style="text-decoration:none">C<span class="dot">·</span>入門課程</a><button class="toggle" id="themeBtn" aria-label="切換深淺色">◐</button></div></header>
+<div class="wrap"><div class="layout"><aside class="side"><nav class="outline"><a class="lhead" href="l1.html">1. 輸入、輸出與數字</a><a class="lhead cur" href="l2.html">2. 整數與浮點數</a><div class="sidenav"><a href="l2p1.html">整數的最後一位</a><a href="l2p2.html">十位數字</a><a href="l2p3.html">各位數字之和</a><a href="l2p4.html">小數部分</a><a href="l2p5.html">小數點後第一位</a><a href="l2p6.html">汽車路程</a><a href="l2p7.html">電子時鐘</a><a href="l2p8.html">總價</a><a href="l2p9.html">時鐘面 - 1</a><a href="l2p10.html">時鐘面 - 2</a></div><span class="lhead muted" title="尚未開放">3. 條件：if / else</span><span class="lhead muted" title="尚未開放">4. for 迴圈</span><span class="lhead muted" title="尚未開放">5. 字串</span><span class="lhead muted" title="尚未開放">6. while 迴圈</span><span class="lhead muted" title="尚未開放">7. 陣列</span><span class="lhead muted" title="尚未開放">8. 函式與遞迴</span><span class="lhead muted" title="尚未開放">9. 二維陣列</span></nav></aside><main class="content"><div class="crumb"><a href="index.html">課程首頁</a> / 第 2 課</div><span class="eyebrow">第 2 課</span><h1>整數與浮點數</h1><div class="theory"><h3>2.1 用 <code>%</code> 和 <code>/</code> 取出各位數字</h3><p><code>n % 10</code> 取個位；<code>n / 10 % 10</code> 取十位；<code>n / 100 % 10</code> 取百位：</p><div class="code"><span class="lang">C</span><pre>int n = 2024;
+printf(&quot;%d\n&quot;, n % 10);       // 4   個位
+printf(&quot;%d\n&quot;, n / 10 % 10);  // 2   十位
+printf(&quot;%d\n&quot;, n / 100 % 10); // 0   百位</pre></div><h3>2.2 各位數字之和</h3><p>把每一位取出來相加：</p><div class="code"><span class="lang">C</span><pre>int n = 123;
+printf(&quot;%d\n&quot;, n / 100 + n / 10 % 10 + n % 10);   // 6  三位數各位之和</pre></div><h3>2.3 浮點數的讀取與輸出</h3><p>浮點數用 <code>double</code>；<code>scanf</code> 讀入要用 <code>%lf</code>，<code>printf</code> 印出用 <code>%f</code>（<code>%.4f</code> = 小數點後 4 位）：</p><div class="code"><span class="lang">C</span><pre>double x;
+scanf(&quot;%lf&quot;, &amp;x);       // 讀浮點數要用 %lf
+printf(&quot;%.4f\n&quot;, x);     // 印小數點後 4 位</pre></div><h3>2.4 取小數部分與小數位</h3><p>減掉整數部分得到小數部分；乘 10 取整再 <code>% 10</code> 取得小數第一位：</p><div class="code"><span class="lang">C</span><pre>double x = 3.75;
+printf(&quot;%.4f\n&quot;, x - (long long)x);   // 0.7500  小數部分
+printf(&quot;%d\n&quot;, (int)(x * 10) % 10);    // 7       小數點後第一位</pre></div><h3>2.5 無條件進位（整數技巧）</h3><p>「不足一份也算一份」可用 <code>(m + n - 1) / n</code> 純整數算出：</p><div class="code"><span class="lang">C</span><pre>int m = 250, n = 100;   // 每天 n 公里，走 m 公里
+printf(&quot;%d\n&quot;, (m + n - 1) / n);   // 3  （無條件進位）</pre></div><h3>2.6 時間換算</h3><p>分鐘數換算成「時 分」：</p><div class="code"><span class="lang">C</span><pre>int t = 150;   // 從午夜起的分鐘數
+printf(&quot;%d %d\n&quot;, t / 60 % 24, t % 60);   // 2 30</pre></div></div><h2 style="margin-top:30px">📝 練習題</h2><p class="lead" style="margin-bottom:6px">本課共 10 題，見<b>側邊欄</b>（手機在上方）。點進每一題，用本地 IDE 完成後貼上測試指令檢查。</p><div class="nav"><a href="index.html">← 課程首頁</a><span class="sp"></span></div><footer>第 2 課 · 10 題練習</footer></main></div></div>
+<script src="app.js"></script>
